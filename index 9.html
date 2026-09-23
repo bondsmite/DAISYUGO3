@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>大集合｜基本ルール版</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#111827;color:#f8fafc;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif}
+header{padding:12px 14px;background:#0b1220;position:sticky;top:0;z-index:5}h1{font-size:20px;margin:0 0 4px}.sub{font-size:12px;color:#94a3b8}
+#app{max-width:900px;margin:auto;padding:10px}.players{display:grid;grid-template-columns:1fr 1fr;gap:8px}.player{background:#1e293b;border-radius:12px;padding:9px}.active{outline:2px solid #facc15}.pname{font-weight:700}.stats{font-size:12px;color:#cbd5e1;margin-top:4px}
+#field{margin:12px 0;padding:14px;background:#0f172a;border-radius:14px;text-align:center;min-height:145px}.label{font-size:12px;color:#94a3b8}.fieldcards{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin:8px}
+.card{display:inline-flex;flex-direction:column;justify-content:space-between;width:92px;min-height:118px;padding:8px;border-radius:10px;background:#f8fafc;color:#111827;border:2px solid #94a3b8;text-align:left}.card.sel{border-color:#facc15;transform:translateY(-4px)}.num{font-size:22px;font-weight:900}.cname{font-size:11px;font-weight:700;line-height:1.15}.meta{font-size:10px;color:#475569}.hand{display:flex;gap:7px;overflow-x:auto;padding:6px 2px 12px}.hand .card{flex:0 0 92px}.actions{display:flex;gap:8px;position:sticky;bottom:0;background:#111827;padding:10px 0}.actions button,.reset{border:0;border-radius:10px;padding:12px 16px;font-weight:800;font-size:15px}.play{background:#facc15;color:#111827}.pass{background:#334155;color:white}.reset{background:#475569;color:white;width:100%;margin-top:8px}
+#log{background:#020617;border-radius:10px;padding:9px;max-height:150px;overflow:auto;font-size:12px;line-height:1.5}
+.win{padding:12px;background:#14532d;border-radius:12px;text-align:center;font-weight:900;margin-bottom:10px}
+@media(max-width:520px){.players{grid-template-columns:1fr}.card{width:84px;min-height:110px}.hand .card{flex-basis:84px}}
+</style>
+</head>
+<body>
+<header><h1>大集合｜基本ルール版</h1><div class="sub">3人対戦・数字1～7のみ28枚 / 効果なし / 毎ターン開始時に全員1枚ドロー</div></header>
+<div id="app">
+<div id="win"></div>
+<div class="players" id="players"></div>
+<div id="field"><div class="label">場</div><div id="fieldcards"></div><div id="rule"></div></div>
+<div><div class="label">あなたの手札</div><div class="hand" id="hand"></div></div>
+<div class="actions"><button class="play" id="play">カードを出す</button><button class="pass" id="pass">パス</button></div>
+<div id="log"></div><button class="reset" id="reset">新しいゲーム</button>
+</div>
+<script>
+const CARD_DATA = [{"id": 1, "name": "兄者", "number": 1, "type": "follower", "bp": 6000, "cost": 1, "tribe": "物種族"}, {"id": 2, "name": "ベルエンジェル", "number": 1, "type": "follower", "bp": 0, "cost": 1, "tribe": "神種族"}, {"id": 3, "name": "バーバ・ヤーガ", "number": 1, "type": "follower", "bp": 5000, "cost": 2, "tribe": "神種族"}, {"id": 4, "name": "ベイマックス", "number": 1, "type": "follower", "bp": 4000, "cost": 3, "tribe": "物種族"}, {"id": 5, "name": "ルパン三世", "number": 2, "type": "follower", "bp": 0, "cost": 3, "tribe": "英種族"}, {"id": 6, "name": "ホルス", "number": 2, "type": "follower", "bp": 4000, "cost": 2, "tribe": "神種族"}, {"id": 7, "name": "ジバニャン", "number": 2, "type": "follower", "bp": 2000, "cost": 2, "tribe": "霊種族"}, {"id": 8, "name": "ぐら", "number": 2, "type": "follower", "bp": 4000, "cost": 0, "tribe": "霊種族"}, {"id": 9, "name": "涼宮ハルヒ", "number": 3, "type": "follower", "bp": 2000, "cost": 0, "tribe": "英種族"}, {"id": 10, "name": "オールマイト", "number": 3, "type": "follower", "bp": 8000, "cost": 2, "tribe": "英種族"}, {"id": 11, "name": "ティンカーベル", "number": 3, "type": "follower", "bp": 3000, "cost": 0, "tribe": "霊種族"}, {"id": 12, "name": "黒崎一護", "number": 3, "type": "follower", "bp": 4000, "cost": 2, "tribe": "霊種族"}, {"id": 13, "name": "関東野菜連合", "number": 4, "type": "follower", "bp": 3000, "cost": 3, "tribe": "霊種族"}, {"id": 14, "name": "アクセルシンクロン", "number": 4, "type": "follower", "bp": 0, "cost": 1, "tribe": "物種族"}, {"id": 15, "name": "関銀屏", "number": 4, "type": "follower", "bp": 6000, "cost": 1, "tribe": "英種族"}, {"id": 16, "name": "猪窪座", "number": 4, "type": "follower", "bp": 7000, "cost": 2, "tribe": "魔種族"}, {"id": 17, "name": "しずくちゃん", "number": 5, "type": "follower", "bp": 1000, "cost": 0, "tribe": "霊種族"}, {"id": 18, "name": "ぐり", "number": 5, "type": "follower", "bp": 6000, "cost": 0, "tribe": "霊種族"}, {"id": 19, "name": "ガイアデルム", "number": 5, "type": "follower", "bp": 9000, "cost": 3, "tribe": "龍種族"}, {"id": 20, "name": "ちいかわ", "number": 5, "type": "follower", "bp": 4000, "cost": 3, "tribe": "霊種族"}, {"id": 21, "name": "バロン・サメディ", "number": 6, "type": "follower", "bp": 4000, "cost": 2, "tribe": "神種族"}, {"id": 22, "name": "ヒソカ", "number": 6, "type": "follower", "bp": 0, "cost": 2, "tribe": "英種族"}, {"id": 23, "name": "封印されし者の左足", "number": 6, "type": "follower", "bp": 1000, "cost": 3, "tribe": "神種族"}, {"id": 24, "name": "キングボンビー", "number": 6, "type": "follower", "bp": 4000, "cost": 2, "tribe": "神種族"}, {"id": 25, "name": "戸愚呂弟", "number": 7, "type": "follower", "bp": 8000, "cost": 2, "tribe": "霊種族"}, {"id": 26, "name": "ジェネシスドラゴン", "number": 7, "type": "follower", "bp": 9000, "cost": 2, "tribe": "龍種族"}, {"id": 27, "name": "金木研", "number": 7, "type": "follower", "bp": 4000, "cost": 2, "tribe": "魔種族"}, {"id": 28, "name": "碇ゲンドウ", "number": 7, "type": "follower", "bp": 3000, "cost": 2, "tribe": "神種族"}];
+const players = [{name:"あなた",human:true},{name:"AI 2"},{name:"AI 3"}];
+let state;
+const $=id=>document.getElementById(id);
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function makeDeck(){return shuffle(CARD_DATA.map(c=>({...c})))}
+function newGame(){
+ state={ps:players.map((p,i)=>({name:p.name,hand:[],deck:makeDeck(),grave:[],cost:3,maxCost:3})),
+        turn:0,field:[],lastPlayer:null,passes:0,selected:null,logs:[],gameOver:false};
+ state.ps.forEach(p=>{for(let i=0;i<5;i++) draw(p)});
+ log("ゲーム開始。数字1～7を各4枚、合計28枚。各プレイヤーに5枚配りました。");
+ startTurn();
+}
+function draw(p){if(p.deck.length)p.hand.push(p.deck.pop())}
+function startTurn(){
+ if(state.gameOver)return;
+ state.ps.forEach(p=>{draw(p);p.cost=p.maxCost});
+ log(`ターン開始：全プレイヤーが山札から1枚ドロー。${state.ps[state.turn].name}のターン。`);
+ aiLoop();
+ render();
+}
+function log(s){state.logs.unshift(s);state.logs=state.logs.slice(0,80)}
+function strength(c){return c.type==="follower" ? {n:Number(c.number),bp:Number(c.bp)||0} : {n:-1,bp:-1}}
+function canPlay(c){
+ if(c.type!=="follower") return false; // 効果なし版ではスペル/Lは未処理
+ if(Number(c.cost)>state.ps[0].cost)return false;
+ if(!state.field.length)return true;
+ let top=state.field[state.field.length-1], a=strength(c),b=strength(top);
+ return a.n>b.n || (a.n===b.n && a.bp>b.bp);
+}
+function humanPlay(){
+ if(state.turn!==0||state.gameOver)return;
+ let p=state.ps[0], idx=state.selected;
+ if(idx==null){log("手札のカードを選択してください。");render();return}
+ let c=p.hand[idx];
+ if(!canPlay(c)){log("そのカードは出せません。");render();return}
+ playCard(0,idx); render();
+}
+function playCard(pi,idx){
+ let p=state.ps[pi],c=p.hand[idx];
+ if(!canPlayFor(pi,c)){return false}
+ p.hand.splice(idx,1);p.cost-=Number(c.cost)||0;state.field.push(c);state.lastPlayer=pi;state.passes=0;
+ log(`${p.name}：${c.name}をプレイ。`);
+ if(p.hand.length===0 && p.deck.length===0){state.gameOver=true; $("win").textContent=`🏆 ${p.name}の勝利！`;return true}
+ nextTurn();
+ return true;
+}
+function canPlayFor(pi,c){
+ let p=state.ps[pi]; if(c.type!=="follower"||Number(c.cost)>p.cost)return false;
+ if(!state.field.length)return true;
+ let a=strength(c),b=strength(state.field.at(-1));
+ return a.n>b.n || (a.n===b.n&&a.bp>b.bp);
+}
+function pass(pi){
+ if(state.gameOver)return;
+ log(`${state.ps[pi].name}：パス`);
+ state.passes++;
+ if(state.passes>=2){
+   log("2人連続パス。場が流れます。");
+   state.ps[state.lastPlayer??pi].grave.push(...state.field); state.field=[];
+   state.passes=0;
+   state.turn=state.lastPlayer??pi;
+   startTurn(); return;
+ }
+ state.turn=(pi+1)%3;
+ if(state.turn===0)render(); else aiLoop();
+}
+function nextTurn(){state.turn=(state.turn+1)%3;if(state.turn===0)render();else aiLoop()}
+function aiLoop(){
+ if(state.gameOver||state.turn===0){render();return}
+ setTimeout(()=>{
+  let p=state.ps[state.turn], playable=p.hand.map((c,i)=>({c,i})).filter(x=>canPlayFor(state.turn,x.c));
+  if(playable.length){
+    playable.sort((a,b)=>(Number(a.c.number)-Number(b.c.number))||((Number(a.c.bp)||0)-(Number(b.c.bp)||0)));
+    playCard(state.turn,playable[0].i);
+  }else pass(state.turn);
+ },500);
+}
+function cardHTML(c,i,selected=false){
+ return `<div class="card ${selected?'sel':''}" onclick="selectCard(${i})"><div class="num">${c.number}</div><div class="cname">${c.name}</div><div class="meta">BP ${c.bp||'-'} / COST ${c.cost||'-'}</div></div>`;
+}
+function selectCard(i){if(state.turn===0&&!state.gameOver){state.selected=(state.selected===i?null:i);render()}}
+function render(){
+ $("players").innerHTML=state.ps.map((p,i)=>`<div class="player ${state.turn===i&&!state.gameOver?'active':''}"><div class="pname">${p.name}</div><div class="stats">山札 ${p.deck.length}｜手札 ${p.hand.length}｜墓地 ${p.grave.length}｜コスト ${p.cost}/${p.maxCost}</div></div>`).join("");
+ $("fieldcards").innerHTML=state.field.length?state.field.map(c=>cardHTML(c,-1)).join(""):"<div class='label'>場は空です</div>";
+ $("rule").textContent=state.field.length?`最後のカード：${state.field.at(-1).name} / 数字${state.field.at(-1).number} / BP ${state.field.at(-1).bp}`:"好きなフォロワーを出せます";
+ $("hand").innerHTML=state.ps[0].hand.map((c,i)=>cardHTML(c,i,i===state.selected)).join("");
+ $("log").innerHTML=state.logs.map(x=>`<div>${x}</div>`).join("");
+ $("play").disabled=state.turn!==0||state.gameOver;
+ $("pass").disabled=state.turn!==0||state.gameOver;
+}
+$("play").onclick=humanPlay;
+$("pass").onclick=()=>pass(0);
+$("reset").onclick=newGame;
+newGame();
+</script>
+</body></html>
