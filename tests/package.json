@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "scripts": {
+    "test": "node join.cjs && node network.cjs && node com.cjs && node excel-update.cjs && node options-update.cjs && node hulk-entry.cjs && node online-bgm.cjs"
+  },
+  "dependencies": {
+    "jsdom": "31.0.0"
+  }
+}
