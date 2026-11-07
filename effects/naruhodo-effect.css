@@ -1,0 +1,4 @@
+#naruhodoObjectionOverlay{position:fixed;inset:0;z-index:20001;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.86);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+#naruhodoObjectionOverlay.show{display:flex;animation:allMightEffectFade .12s ease-out}
+#naruhodoObjectionOverlay img{display:block;width:min(92vw,760px);max-height:82vh;object-fit:contain;filter:drop-shadow(0 8px 24px rgba(0,0,0,.55));animation:naruhodoObjectionPop .18s cubic-bezier(.2,.9,.25,1.2)}
+@keyframes naruhodoObjectionPop{from{transform:scale(.65) rotate(-3deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
