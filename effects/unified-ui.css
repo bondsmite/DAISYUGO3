@@ -1,0 +1,38 @@
+/* The six supplied emblems, without their nameplates. */
+.card:has(>.tribe-icon){padding-bottom:48px!important}
+.tribe-icon{position:absolute;left:6px;bottom:5px;width:38px;height:38px;border-radius:50%;background-image:url('./tribe-icons.png');background-size:300% 200%;background-repeat:no-repeat;pointer-events:none}
+.tribe-0{background-position:0 0}.tribe-1{background-position:50% 0}.tribe-2{background-position:100% 0}.tribe-3{background-position:0 100%}.tribe-4{background-position:50% 100%}.tribe-5{background-position:100% 100%}
+#ribbonDetail{display:none!important}
+/* Every zone picker uses the Vibranium dialog and card grid dimensions. */
+:is(#classicPicker,#excelChoiceModal,#takinaPicker,#fatherPicker,#hoshinoAiPicker)>:first-child{width:min(850px,96vw)!important;max-width:850px!important;max-height:90vh!important;overflow:auto!important;border:1px solid #52667e!important;border-radius:14px!important;background:#172231!important;color:#edf3fa!important;padding:16px!important;box-sizing:border-box}
+:is(#madokaList,#classicCards,#excelChoiceCards,#takinaPickerList,#fatherCards,#hoshinoAiList,#sunrakuPickList,#initialLeadChoices){display:grid!important;grid-template-columns:repeat(auto-fill,minmax(145px,1fr))!important;gap:10px!important;align-content:start;padding:0 16px 16px!important}
+:is(#classicCards,#excelChoiceCards,#sunrakuPickList,#initialLeadChoices)>button{width:auto!important;padding:0!important;background:transparent!important;border-radius:11px!important;text-align:left}
+:is(#madokaList,#classicCards,#excelChoiceCards,#takinaPicker,#fatherCards,#hoshinoAiPicker,#sunrakuPickList,#initialLeadChoices) .card{width:100%!important;box-sizing:border-box;cursor:pointer;margin:0!important}
+:is(#neitoNumbers,#cureLemonadeNumbers,#fatherNumbers){display:flex!important;flex-wrap:wrap!important;gap:8px!important;padding:0!important}
+:is(#neitoNumbers,#cureLemonadeNumbers,#fatherNumbers)>button{width:auto!important;min-width:40px;height:auto!important;padding:10px 14px!important;border:1px solid #52667e!important;border-radius:10px!important;background:#2b3b50!important;color:white!important;font-size:14px!important;font-weight:700!important}
+:is(#neitoNumbers,#cureLemonadeNumbers,#fatherNumbers)>button:is(.primary,.selected){background:#2464ad!important;border-color:#90c6ff!important;box-shadow:0 0 0 2px #90c6ff!important}
+#fatherNumbers[style*="display: none"],#fatherCards[style*="display: none"],#sunrakuPickList[style*="display: none"]{display:none!important}
+#effectResultModal{position:fixed;inset:0;z-index:20000;display:flex;align-items:center;justify-content:center;background:#06101ce8;padding:18px;pointer-events:auto}
+#effectResultModal>section{background:#172231;color:white;border:1px solid #d5b56b;border-radius:16px;padding:20px;width:min(900px,94vw);max-height:90vh;overflow:auto;text-align:center}
+#effectResultModal h2{font-size:18px;line-height:1.6}.result-count{color:#cbb377;font-size:13px}.result-cards{display:flex;justify-content:center;flex-wrap:wrap;gap:12px}.result-cards .card{width:145px!important;text-align:left}
+@media(max-width:600px){:is(#madokaList,#classicCards,#excelChoiceCards,#takinaPickerList,#fatherCards,#hoshinoAiList,#sunrakuPickList,#initialLeadChoices){grid-template-columns:repeat(2,minmax(0,1fr))!important;padding:0 6px 12px!important}}
+#cureLemonadeModal,#fatherPicker.number-inline{position:static!important;inset:auto!important;background:#101923!important;padding:12px!important;margin-top:10px!important;border:1px solid #d5b56b!important;border-radius:12px!important;justify-content:flex-start!important}
+#cureLemonadeModal>.grave-dialog,#fatherPicker.number-inline>:first-child{width:100%!important;max-height:none!important;border:0!important;background:transparent!important;box-shadow:none!important;padding:0!important;border-radius:0!important}
+#cureLemonadeModal .grave-head,#cureLemonadeModal .grave-summary{padding:0!important;margin:6px 0 10px!important}
+#cureLemonadeModal #cureLemonadeNumbers+div{padding:10px 0 0!important}
+#cureLemonadeConfirm,#fatherPicker.number-inline #fatherConfirm{background:#2464ad!important;border:1px solid #52667e!important;border-radius:10px!important;padding:10px 14px!important}
+#sunrakuPickerModal{position:fixed;inset:0;z-index:5300;background:#000d;display:flex;align-items:center;justify-content:center;padding:16px}
+#sunrakuPickerModal>div{width:min(850px,96vw);max-height:90vh;overflow:auto;background:#172231!important;border:1px solid #52667e!important;border-radius:14px;padding:16px}
+#madokaModal>.madoka-dialog{width:min(850px,96vw);max-height:90vh;border-radius:14px;border-color:#52667e}
+:is(#classicPicker,#excelChoiceModal,#takinaPicker,#fatherPicker,#hoshinoAiPicker) h2{font-size:16px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid #35475c}
+:is(#madokaAddBtn,#classicConfirm,#excelChoiceConfirm,#takinaConfirm,#fatherConfirm,#hoshinoAiConfirm,#sunrakuConfirmBtn){background:#2464ad!important;color:white!important;border:1px solid #52667e!important;border-radius:10px!important;padding:10px 14px!important;font-weight:700!important}
+
+#initialLeadChoices>button{padding:0;background:transparent;text-align:left;border:3px solid #53657b;border-radius:11px}#initialLeadChoices>button.primary{border-color:#ffd84d}#initialLeadChoices .card{width:100%;box-sizing:border-box;margin:0}
+/* One compact hand-style card size for every selection screen. */
+:is(#madokaList,#classicCards,#excelChoiceCards,#takinaPickerList,#fatherCards,#hoshinoAiList,#sunrakuPickList,#initialLeadChoices){grid-template-columns:repeat(auto-fill,116px)!important;justify-content:center;align-items:start}
+:is(#madokaList,#classicCards,#excelChoiceCards,#takinaPickerList,#fatherCards,#hoshinoAiList,#sunrakuPickList,#initialLeadChoices) .card{width:106px!important;height:190px!important;min-height:190px!important;max-height:190px!important;box-sizing:border-box!important;flex:none!important;margin:0!important;padding:8px 8px 48px!important;overflow:hidden}
+:is(#madokaList,#classicCards,#excelChoiceCards,#takinaPickerList,#fatherCards,#hoshinoAiList,#sunrakuPickList,#initialLeadChoices) .effect{display:none!important}
+:is(#madokaList,#classicCards,#excelChoiceCards,#takinaPickerList,#fatherCards,#hoshinoAiList,#sunrakuPickList,#initialLeadChoices)>button{width:116px!important;box-sizing:border-box;padding:3px!important;align-items:center}
+:is(#madokaList,#classicCards,#excelChoiceCards,#takinaPickerList,#fatherCards,#hoshinoAiList,#sunrakuPickList,#initialLeadChoices) .name{font-size:13px!important;line-height:1.3!important;min-height:34px;overflow:hidden}
+:is(#madokaList,#classicCards,#excelChoiceCards,#takinaPickerList,#fatherCards,#hoshinoAiList,#sunrakuPickList,#initialLeadChoices) .num{font-size:26px!important}
+:is(#madokaList,#classicCards,#excelChoiceCards,#takinaPickerList,#fatherCards,#hoshinoAiList,#sunrakuPickList,#initialLeadChoices) .meta{font-size:11px!important}
