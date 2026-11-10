@@ -1,1 +1,0 @@
-window.DAISHUGO_SHOP_ITEMS = [{"id": "sano-manjiro", "cardName": "佐野万次郎", "price": 10}, {"id": "yagami-light", "cardName": "夜神月", "price": 10}, {"id": "doctor-doom", "cardName": "ドクタードゥーム", "price": 10}];
