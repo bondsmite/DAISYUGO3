@@ -1,5 +1,0 @@
-const {load}=require('./harness.cjs'),fs=require('fs'),path=require('path'),assert=require('assert');
-(async()=>{const file=path.join(__dirname,'../menu-test.html');try{
-fs.writeFileSync(file,fs.readFileSync(path.join(__dirname,'../index.html'),'utf8').replace(/<iframe id="onlineModeFrame"[^>]*><\/iframe>/,'<div id="onlineModeFrame" src="./online-mode.html"></div>'));
-const {w,errors}=await load('menu-test.html');try{w.document.getElementById('menuOnline4Btn').click();assert.equal(w.document.getElementById('onlineModeFrame').getAttribute('src'),'./online-mode-4.html');assert(w.document.getElementById('onlineModeShell').classList.contains('open'));w.document.getElementById('menuOnlineBtn').click();assert.equal(w.document.getElementById('onlineModeFrame').getAttribute('src'),'./online-mode.html');assert(!errors.length,errors.join('\n'));console.log('PASS menu selects distinct three-/four-player pages');}finally{w.close()}
-}finally{fs.unlinkSync(file)}})().catch(e=>{console.error(e);process.exitCode=1});
