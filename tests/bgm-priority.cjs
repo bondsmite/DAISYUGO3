@@ -1,0 +1,22 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
+const root=path.join(__dirname,'..');
+const code=fs.readFileSync(path.join(root,'effects/game-engine.js'),'utf8');
+const a=code.indexOf('// One-shot character BGM;'),b=code.indexOf('function matchTurnOrder()',a);
+assert(a>=0&&b>a);
+class Audio { constructor(src=''){this.src=src;this.id='';this.paused=true;this.currentTime=0;this.playCount=0;this.onended=null;this.onerror=null;this.volume=1;} pause(){this.paused=true;}play(){this.paused=false;this.playCount++;return Promise.resolve();}end(){this.onended?.();}}
+const base=new Audio('normal');base.id='gameBgm1';const second=new Audio('empty');second.id='gameBgm2';const roxas=new Audio('roxas');roxas.id='roxasBgm';roxas.getAttribute=()=>('./effects/assets/roxas-bgm.mp3');
+const ctx={Audio,window:{showSanoEntryImage:()=>()=>{}},document:{getElementById:(id)=>({gameBgm1:base,gameBgm2:second,roxasBgm:roxas})[id]||null},G:{winner:null},gameBgmEnabled:true,stabilizeBgmPlayback:()=>{},applyCharacterBgmMobileVolume:(el,v)=>{el.volume=v},syncGameBgmToDecks:()=>{},setTimeout:()=>10,clearTimeout:()=>{}};
+vm.createContext(ctx);vm.runInContext(code.slice(a,b),ctx);
+const run=(script)=>vm.runInContext(script,ctx);
+base.currentTime=67;base.play();
+ctx.window.startZomaBgm();const zoma=run('zomaBgmSession.audio');
+assert(zoma.src.endsWith('zoma-bgm.mp3'));assert(base.paused);
+ctx.window.startSanoEntry();const intro=run('zomaBgmSession.audio');assert(zoma.paused);assert(intro.src.endsWith('sano-inaiyona.m4a'));
+intro.end();const sano=run('zomaBgmSession.audio');assert(sano.src.endsWith('sano-white-noise.mp3'));
+sano.end();assert.equal(run('zomaBgmSession'),null);assert.equal(zoma.playCount,1);assert.equal(base.currentTime,0);assert(!base.paused);
+ctx.window.startTomodachiBgm();const tomodachi=run('zomaBgmSession.audio');ctx.window.startZomaBgm();assert(tomodachi.paused);const zoma2=run('zomaBgmSession.audio');
+ctx.window.startSanoEntry();assert(zoma2.paused);const abortedIntro=run('zomaBgmSession.audio');
+ctx.window.startTomodachiBgm();assert(abortedIntro.paused);assert.equal(run('zomaBgmSession.audio.src'),'./effects/assets/tomodachi-bgm.mp3');assert.equal(zoma2.playCount,1);
+run('zomaBgmSession.audio.onended()');assert.equal(run('zomaBgmSession'),null);assert(!base.paused);
+assert(code.includes('startCharacterBgm(audio.getAttribute(\'src\')||audio.src,{baseVolume:1})'),'Roxas must use the character BGM manager');
+console.log('PASS all character tracks override earlier tracks, abandoned tracks never resume, Sano intro->song and restore');
