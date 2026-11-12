@@ -1,0 +1,10 @@
+const assert=require('assert'),vm=require('vm'),fs=require('fs');
+let sources=[],fetches=0,resolveFetch;
+class Media extends EventTarget{constructor(){super();this.src='sound.mp3';this.currentTime=0;this.volume=.7;this.playbackRate=1;this.dataset={};this.loop=false;}play(){return Promise.reject(Object.assign(new Error('gesture'),{name:'NotAllowedError'}));}pause(){}}
+class Context extends EventTarget{constructor(){super();this.state='suspended';this.currentTime=0;this.destination={}}resume(){this.state='running';this.dispatchEvent(new Event('statechange'));return Promise.resolve()}decodeAudioData(){return Promise.resolve({duration:60})}createGain(){return {gain:{value:1},connect(){}}}createBufferSource(){const n={playbackRate:{value:1},connect(){},start(){this.started=true},stop(){this.stopped=true}};sources.push(n);return n}}
+const document=new EventTarget(),window={AudioContext:Context};const scope={HTMLMediaElement:Media,document,window,Event,Map,WeakMap,Promise,setTimeout,fetch:()=>{fetches++;return Promise.resolve({ok:true,arrayBuffer:()=>Promise.resolve(new ArrayBuffer(1))})}};vm.createContext(scope);vm.runInContext(fs.readFileSync(__dirname+'/../effects/reliable-audio.js','utf8'),scope);
+(async()=>{const a=new Media();await a.play();assert.equal(sources.length,1);assert(sources[0].started);await a.play();assert.equal(sources.length,1);a.pause();assert(sources[0].stopped);
+const b=new Media();window.DAISHUGO_AUDIO.buffer(b);window.DAISHUGO_AUDIO.setGain(b,.21);await b.play();assert.equal(sources.length,2);b.pause();
+const c=new Media();const promise=c.play();c.pause();await promise;assert.equal(sources.length,2,'pause before rejected native play cancels fallback');
+let ended=0;const d=new Media();d.addEventListener('ended',()=>ended++);await d.play();sources.at(-1).onended();assert.equal(ended,1);
+assert.equal(fetches,1,'reuse decoded sound');console.log('PASS shared unlock, autoplay fallback, no duplicates, cancellation, ended event, decoded cache');})().catch(e=>{console.error(e);process.exitCode=1});

@@ -1,0 +1,22 @@
+const assert=require('node:assert/strict');
+const fs=require('fs');
+const vm=require('vm');
+const source=fs.readFileSync(__dirname+'/../effects/luxord-entry.js','utf8');
+const timers=[];
+const made=[];
+function el(tag){const obj={tag,style:{setProperty(k,v){this[k]=v}},children:[],dataset:{},setAttribute(){},appendChild(c){this.children.push(c)},remove(){this.removed=true},play(){return Promise.resolve()},pause(){this.paused=true}};made.push(obj);return obj;}
+const document={createElement:el,body:{appendChild(c){this.child=c}},querySelectorAll:()=>[{dataset:{id:'luxord'},getBoundingClientRect:()=>({left:100,top:120,width:100,height:180})}]};
+const context={document,window:{innerWidth:1200,innerHeight:720},setTimeout(fn,ms){const t={fn,ms};timers.push(t);return t},clearTimeout(t){t.cancelled=true}};
+vm.runInNewContext(source,context);
+let ended=0;
+context.window.playLuxordEntry(7,()=>ended++,'luxord');
+assert.equal(document.body.child.children.filter(x=>x.className?.startsWith('luxord-playing-card')).length,7);
+assert.equal(document.body.child.children.filter(x=>x.tag==='audio').length,1);
+assert.equal(timers.at(-1).ms,3000);
+timers.at(-1).fn();assert.equal(ended,1);assert(document.body.child.removed);
+context.window.playLuxordEntry(0,()=>ended++,'luxord');
+assert.equal(document.body.child.children.filter(x=>x.className?.startsWith('luxord-playing-card')).length,0);
+timers.at(-1).fn();assert.equal(ended,2);
+context.window.playLuxordEntry(3,()=>ended++,'luxord');
+context.window.stopLuxordEntry();assert.equal(ended,2);assert(document.body.child.removed);
+console.log('PASS Luxord 7 cards, 0 cards, 3-second lock and audio cleanup');
