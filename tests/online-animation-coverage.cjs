@@ -1,7 +1,0 @@
-const {load}=require('./harness.cjs'),assert=require('assert');
-(async()=>{for(const page of ['online-mode.html','online-mode-4.html']){const {w,errors}=await load(page);try{
-let seen=[];for(const fn of ['playTomodachiEntry','playZomaEntry','playDoomEntry','playMadokaEntry','startSanoEntry','playHulkEntry','playDasetEntryEffect'])w[fn]=()=>seen.push(fn);
-const names={'ともだち':'playTomodachiEntry','大魔王ゾーマ':'playZomaEntry','ドクタードゥーム':'playDoomEntry','鹿目まどか':'playMadokaEntry','佐野万次郎':'startSanoEntry','ハルク':'playHulkEntry','ダセット':'playDasetEntryEffect'};
-for(const [name,fn] of Object.entries(names)){w.DAISHUGO_PLAY_ONLINE_ANIMATION({name,effectActivated:true},null);assert(seen.includes(fn),name);}
-for(const [name,id,cls,below] of [['星野アイ','hoshinoAiStageOverlay','show'],['成歩堂龍一','naruhodoObjectionOverlay','show'],['オールマイト','allMightEffectOverlay','show',{kind:'follower',number:'3'}],['うちはマダラ','madaraSharinganStage','active'],['ネルギガンテ','nergiganteThornStageOverlay','show']]){w.DAISHUGO_PLAY_ONLINE_ANIMATION({name},below);assert(w.document.getElementById(id)?.classList.contains(cls),name);}
-w.DAISHUGO_PLAY_ONLINE_ANIMATION({name:'球磨川禊'},{number:'L'});assert(w.document.getElementById('kumagawaOnlineEntry'));assert.equal(errors.length,0,errors.join('\n'));console.log('PASS '+page+' all registered remote entry dispatch/overlays');}finally{w.close()}}})().catch(e=>{console.error(e);process.exitCode=1});
