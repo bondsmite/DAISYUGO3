@@ -1,7 +1,0 @@
-#madaraSharinganStage{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;overflow:hidden;background:#050006;pointer-events:all;}
-#madaraSharinganStage.active{display:flex;animation:madaraStageFade .16s ease-out both;}
-#madaraSharinganStage img{width:100%;height:100%;object-fit:cover;object-position:center;animation:madaraEyeReveal 2s cubic-bezier(.12,.75,.18,1) both;filter:contrast(1.18) saturate(1.25);}
-#madaraSharinganStage:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at center,transparent 18%,rgba(10,0,12,.18) 48%,rgba(0,0,0,.82) 100%);animation:madaraDarkPulse 2s ease-in-out both;pointer-events:none;}
-@keyframes madaraStageFade{from{opacity:0}to{opacity:1}}
-@keyframes madaraEyeReveal{0%{transform:scale(.38) rotate(-8deg);filter:brightness(2.4) contrast(1.6) saturate(1.8)}28%{transform:scale(1.12) rotate(2deg)}55%{transform:scale(1.02) rotate(-1deg)}100%{transform:scale(1.08) rotate(0);filter:brightness(.92) contrast(1.2) saturate(1.3)}}
-@keyframes madaraDarkPulse{0%,100%{opacity:.25}35%{opacity:.9}65%{opacity:.45}}
