@@ -1,0 +1,4 @@
+#allMightEffectOverlay{position:fixed;inset:0;z-index:20000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.88);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+#allMightEffectOverlay.show{display:flex;animation:allMightEffectFade .18s ease-out}
+#allMightEffectOverlay .allmight-effect-message{font-weight:1000;font-size:clamp(3rem,13vw,10rem);letter-spacing:.08em;color:#fff;text-shadow:0 0 18px #f5c542,0 0 48px #e43b20;text-align:center;padding:20px}
+@keyframes allMightEffectFade{from{opacity:0}to{opacity:1}}
