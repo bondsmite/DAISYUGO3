@@ -1,0 +1,20 @@
+#homuraRewindOverlay{position:fixed;inset:0;z-index:1000004;overflow:hidden;pointer-events:all;background:radial-gradient(ellipse at center,#34204dd9,#090d23ed 75%);animation:rewindFade 5s linear both;isolation:isolate}
+.rewind-vortex{position:absolute;left:50%;top:50%;width:140vmax;height:140vmax;margin:-70vmax;background:repeating-conic-gradient(from 0deg,transparent 0deg 20deg,#b4d9ff18 22deg,transparent 25deg 40deg);animation:rewindSpin 5s linear infinite;filter:blur(3px)}
+.rewind-clock{position:absolute;left:50%;top:50%;width:min(65vw,65vh);aspect-ratio:1;transform:translate(-50%,-50%);border:3px solid #dbd4ffb0;border-radius:50%;box-shadow:0 0 50px #a78aff80,inset 0 0 65px #9ca7ff70;background:repeating-conic-gradient(#e4d8ff88 0deg 1deg,transparent 1deg 30deg);outline:1px solid #b5b6ff66;outline-offset:18px}
+.rewind-clock:before{content:'';position:absolute;inset:4%;border-radius:50%;background:radial-gradient(circle,#28314a,#111629);border:1px solid #d8cfff88}
+.rewind-hand{position:absolute;left:50%;bottom:50%;transform-origin:50% 100%;background:#e4ddff;border-radius:4px;box-shadow:0 0 18px #c4b4ff;animation:rewindSpin 1.15s linear infinite}
+.rewind-hand.long{width:3px;height:43%}.rewind-hand.short{width:5px;height:29%;animation-duration:3.2s}
+.rewind-core{position:absolute;left:calc(50% - 7px);top:calc(50% - 7px);height:14px;width:14px;border-radius:50%;background:white;box-shadow:0 0 25px 8px #b3b1ff}
+.rewind-shard{position:absolute;left:50%;top:50%;width:4px;height:55px;background:linear-gradient(transparent,#d0c7ff);box-shadow:0 0 8px #bfbaff;animation:rewindGather 1.7s linear infinite;animation-delay:var(--delay)}
+@keyframes rewindSpin{from{rotate:0deg}to{rotate:-360deg}}
+@keyframes rewindGather{from{transform:rotate(var(--a)) translateY(60vmax) scale(1.4);opacity:0}20%{opacity:.8}to{transform:rotate(calc(var(--a) - 45deg)) translateY(10px) scale(.1);opacity:0}}
+@keyframes rewindFade{0%{opacity:0}7%,90%{opacity:1}100%{opacity:0}}
+.surt-meteor-overlay{position:fixed;inset:0;z-index:4900;pointer-events:none;overflow:hidden}
+.surt-impact{position:absolute;width:0;height:0;pointer-events:none}
+.surt-meteor{position:absolute;width:27px;height:95px;left:-13px;bottom:0;border-radius:60% 60% 45% 45%;background:linear-gradient(transparent,#e3250a 45%,#ff9a35 82%,#fff4b8);box-shadow:0 10px 25px #ff1b0d;opacity:0;animation:surtFall 620ms ease-in both;animation-delay:var(--delay);transform-origin:50% 100%}
+.surt-burst{position:absolute;left:-70px;top:-70px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,#fffbd3 0%,#ffad2f 15%,#ed2812 38%,#76100755 60%,transparent 72%);opacity:0;animation:surtBlast 850ms ease-out both;animation-delay:calc(var(--delay) + 620ms)}
+.surt-shockwave{position:absolute;left:-45px;top:-18px;width:90px;height:36px;border-radius:50%;border:3px solid #ff6d38;opacity:0;animation:surtWave 850ms ease-out both;animation-delay:calc(var(--delay) + 620ms)}
+@keyframes surtFall{0%{transform:translate(-180px,-65vh) rotate(-24deg);opacity:0}10%,95%{opacity:1}100%{transform:translate(0,0) rotate(-24deg);opacity:0}}
+@keyframes surtBlast{0%{transform:scale(.12);opacity:0}12%{opacity:1}100%{transform:scale(1.5);opacity:0}}
+@keyframes surtWave{0%{transform:scale(.2);opacity:1}100%{transform:scale(3);opacity:0}}
+@media(prefers-reduced-motion:reduce){.rewind-vortex,.rewind-hand{animation-duration:5s}.rewind-shard{display:none}}
