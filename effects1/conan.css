@@ -1,0 +1,39 @@
+#excelChoiceModal.conan-guess section {
+  width:min(620px,100%); box-sizing:border-box; border:1px solid #c8a770;
+}
+#excelChoiceModal.conan-guess #excelChoiceCards {
+  position:relative; display:block!important; overflow:hidden;
+  background:#122328; border-radius:9px;
+}
+.conan-guess #excelChoiceCards img {
+  display:block; width:100%; height:clamp(160px,36vh,350px); object-fit:cover; object-position:left center;
+}
+.conan-bubble {
+  position:absolute; top:12%; right:3%; width:49%; box-sizing:border-box;
+  padding:clamp(10px,2vw,18px); border:2px solid #242027; border-radius:18px;
+  background:#fffaf0; color:#312a28; font-weight:700; font-size:14px;
+  box-shadow:3px 4px 0 #17171988;
+}
+.conan-bubble::before {
+  content:''; position:absolute; left:-11px; bottom:16%;
+  width:16px; height:16px; background:#fffaf0;
+  border:solid #242027; border-width:0 0 2px 2px; transform:skew(-23deg) rotate(25deg);
+}
+.conan-bubble input {
+  display:block; width:100%; min-width:0; margin-top:6px; box-sizing:border-box;
+  border:0; border-bottom:2px solid #956942; padding:6px 2px;
+  font-size:16px; color:#171519; background:transparent;
+}
+.conan-correct, .conan-miss {
+  position:fixed; inset:0; z-index:1000002; display:grid; place-items:center; background:black;
+}
+.conan-correct img, .conan-miss img { width:100%; height:100%; object-fit:contain; }
+
+@media (max-width:600px), (max-height:480px) {
+  #excelChoiceModal.conan-guess { z-index:1000012!important; }
+  #excelChoiceModal.conan-guess section { max-height:80dvh!important; padding:12px!important; }
+  #excelChoiceModal.conan-guess #excelChoiceCards { padding:0!important; }
+  .conan-guess #excelChoiceCards img { height:auto; max-height:34dvh; object-fit:contain; }
+  .conan-guess .conan-bubble { position:relative; display:block; top:auto; right:auto; width:100%; }
+  .conan-guess .conan-bubble::before { display:none; }
+}
